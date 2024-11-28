@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Left Border with Specific Width -->
+    <item
+        android:left="0dp"
+        android:right="0dp"
+        android:top="0dp"
+        android:bottom="0dp">
+        <shape>
+            <solid android:color="#F44336"/> <!-- Left border color -->
+            <size android:width="8dp"/> <!-- Left border width -->
+            <corners android:radius="8dp"/> <!-- Outer rounded corners -->
+        </shape>
+    </item>
+
+    <!-- Main Border with Rounded Outer Corners -->
+    <item
+        android:left="8dp"
+        android:right="0dp"
+        android:top="0dp"
+        android:bottom="0dp">
+    <shape>
+        <solid android:color="#FFFFFF"/> <!-- Background color for EditText -->
+        <stroke
+            android:color="#F44336"
+        android:width="2dp"/>
+        <corners android:radius="8dp"/> <!-- Apply rounded corners to outer border -->
+        <padding
+            android:left="10dp"
+            android:top="10dp"
+            android:right="10dp"
+            android:bottom="10dp"/> <!-- Internal padding for EditText content -->
+    </shape>
+</item>
+    </layer-list>

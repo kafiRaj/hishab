@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".BudgetGridView"
+    android:padding="16dp">
+
+
+    <!-- Add New Row Button -->
+    <Button
+        android:id="@+id/btn_add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="নতুন যোগ করুন"
+        android:backgroundTint="#F44336"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Column Headers -->
+    <LinearLayout
+        android:id="@+id/column_headers"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:background="#EEEEEE"
+        android:elevation="2dp"
+        app:layout_constraintTop_toBottomOf="@id/btn_add"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- Name Column -->
+        <TextView
+            android:id="@+id/tv_header_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="5"
+            android:text="মাসের নাম"
+            android:textColor="#F44336"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:gravity="start" />
+
+
+
+        <!-- Comments Column -->
+        <TextView
+            android:id="@+id/tv_header_amount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="পরিমাণ (টাকা)"
+            android:textColor="#F44336"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:gravity="start" />
+
+        <!-- Status Column -->
+        <TextView
+            android:id="@+id/tv_header_status"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="সম্পাদনা"
+            android:textColor="#F44336"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:gravity="start" />
+
+
+    </LinearLayout>
+
+    <!-- RecyclerView to Display Table -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view_budget_grid_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/column_headers"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

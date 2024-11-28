@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">Amar Hisab</string>
+    <string name="app_name2">আমার হিসাব</string>
+    <string name="open_drawer">Drawer Opened</string>
+    <string name="close_drawer">Drawer Closed</string>
+
+<string-array name="months">
+    <item>জানুয়ারি</item>
+    <item>ফেব্রুয়ারি</item>
+    <item>মার্চ</item>
+    <item>এপ্রিল</item>
+    <item>মে</item>
+    <item>জুন</item>
+    <item>জুলাই</item>
+    <item>আগস্ট</item>
+    <item>সেপ্টেম্বর</item>
+    <item>অক্টোবর</item>
+    <item>নভেম্বর</item>
+    <item>ডিসেম্বর</item>
+</string-array>
+
+</resources>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="tv_app_title" type="id" />
+    <item name="column_headers" type="id" />
+    <item name="tv_header_name" type="id" />
+    <item name="tv_header_section" type="id" />
+    <item name="tv_header_comments" type="id" />
+    <item name="tv_header_status" type="id" />
+</resources>
