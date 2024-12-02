@@ -60,21 +60,8 @@ public class IncomeExpenseActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle("আমার হিসাব");
             toolbar.setTitleTextColor(Color.WHITE);
-
+            toolbar.setNavigationIcon(R.drawable.ic_back);
         }
-
-        // Initialize DrawerLayout and NavigationView
-        drawerLayout = findViewById(R.id.drawer_layout);
-        navigationView = findViewById(R.id.nav_view);
-
-
-        // Add Drawer Toggle for Toolbar (Hamburger Menu)
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawerLayout, toolbar, R.string.open_drawer, R.string.close_drawer
-        );
-        drawerLayout.addDrawerListener(toggle);
-        toggle.syncState();
-
 
 
         // Initialize Views
@@ -108,7 +95,7 @@ public class IncomeExpenseActivity extends AppCompatActivity {
         // Set the adapter to the spinner
         spinnerIncomeExpense.setAdapter(incomeSectionAdapter);
 
-// Optional: Add a listener to handle the placeholder selection
+// listener to handle the placeholder selection
         spinnerIncomeExpense.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -144,6 +131,8 @@ public class IncomeExpenseActivity extends AppCompatActivity {
 
             }
         });
+
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
     }
 
 
@@ -164,8 +153,8 @@ public class IncomeExpenseActivity extends AppCompatActivity {
                     selectedDate.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
                     // Format to show in TextView
-                    String formattedDate = new SimpleDateFormat("d MMMM yyyy", Locale.getDefault())
-                            .format(selectedDate.getTime());
+                    //String formattedDate = new SimpleDateFormat("d MMMM yyyy", Locale.getDefault())
+                    String formattedDate = new SimpleDateFormat("d MMMM yyyy", new Locale("bn", "BD")).format(selectedDate.getTime());
                     tvIncomeExpenseDate.setText(formattedDate); // Set the formatted date to the TextView
                 },
                 currentYear, currentMonth, currentDay); // Default date is set to the current date
@@ -181,7 +170,9 @@ public class IncomeExpenseActivity extends AppCompatActivity {
     private String getCurrentDate() {
         // Get the current date
         Calendar calendar = Calendar.getInstance();
-        return new SimpleDateFormat("d MMMM yyyy", Locale.getDefault()).format(calendar.getTime());
+        //return new SimpleDateFormat("d MMMM yyyy", Locale.getDefault()).format(calendar.getTime());
+        return new SimpleDateFormat("d MMMM yyyy", new Locale("bn", "BD")).format(calendar.getTime());
+
 
     }
 
@@ -219,11 +210,11 @@ public class IncomeExpenseActivity extends AppCompatActivity {
 
             // First, try parsing with Bengali locale
             try {
-                date = inputFormatEnglish.parse(selectedDate);
-            } catch (ParseException e) {
-                // If it fails, try with English locale
                 date = inputFormatBengali.parse(selectedDate);
 
+            } catch (ParseException e) {
+                // If it fails, try with English locale
+                date = inputFormatEnglish.parse(selectedDate);
             }
 
             // Convert to desired format
@@ -255,6 +246,11 @@ public class IncomeExpenseActivity extends AppCompatActivity {
         spinnerIncomeExpense.setSelection(0);
         tv_income_type.setText("");
         etAmount.setText("");
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }
 

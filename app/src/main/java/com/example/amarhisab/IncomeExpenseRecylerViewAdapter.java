@@ -22,12 +22,12 @@ public class IncomeExpenseRecylerViewAdapter extends RecyclerView.Adapter<Income
 
     // ViewHolder class
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tvIncomeSection, tvIncomeType, tvAmount;
+        TextView tvIncomeSection, tvIncomeExpenseDate, tvAmount;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvIncomeSection = itemView.findViewById(R.id.tv_income_section);
-            tvIncomeType = itemView.findViewById(R.id.tv_income_type);
+            tvIncomeExpenseDate = itemView.findViewById(R.id.tv_income_date);
             tvAmount = itemView.findViewById(R.id.tv_amount);
         }
     }
@@ -46,7 +46,7 @@ public class IncomeExpenseRecylerViewAdapter extends RecyclerView.Adapter<Income
     public void onBindViewHolder(@NonNull IncomeExpenseRecylerViewAdapter.ViewHolder holder, int position) {
         IncomeExpenseItem incomeExpenseItem = incomeExpenseItemList.get(position);
         holder.tvIncomeSection.setText(incomeExpenseItem.getIncomeExpenseSection());
-        holder.tvIncomeType.setText(incomeExpenseItem.getIncomeType());
+        holder.tvIncomeExpenseDate.setText(incomeExpenseItem.getDate());
         holder.tvAmount.setText(incomeExpenseItem.getAmount());
     }
 

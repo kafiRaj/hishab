@@ -49,8 +49,8 @@
 
             <TextView
                 android:id="@+id/tv_date_label"
-                android:layout_width="40dp"
-                android:layout_height="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:text="তারিখ:"
                 android:textColor="#F44336"
@@ -170,16 +170,6 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-    <!-- Left menu -->
-    <com.google.android.material.navigation.NavigationView
-        android:id="@+id/nav_view"
-        android:layout_width="280dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:background="#F5F5F5"
-        app:headerLayout="@layout/nav_header"
-        app:itemIconTint="#F44336"
-        app:itemTextColor="#F44336"
-        app:menu="@menu/drawer_menu" />
+
 
 </androidx.drawerlayout.widget.DrawerLayout>

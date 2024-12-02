@@ -6,10 +6,12 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.icu.text.SimpleDateFormat;
 import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -215,7 +217,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         List<IncomeExpenseItem> incomeExpenseItemList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
 
-        String query = "SELECT ie.id, ies.name AS section_name, ie.income_type, ie.amount " +
+        String query = "SELECT ie.id, ies.name AS section_name, ie.income_type, ie.amount , ie.income_expense_date " +
                 "FROM income_expense ie " +
                 "JOIN income_expense_section ies ON ie.income_expense_section = ies.id";
 
@@ -227,9 +229,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 String income_expense_section = cursor.getString(1); // Fetched section name
                 String income_type = cursor.getString(2);
                 String amount = cursor.getString(3);
+                String date = cursor.getString(4);
 
                 // Pass the resolved section name to the constructor
-                incomeExpenseItemList.add(new IncomeExpenseItem(id, income_expense_section, income_type, amount));
+                incomeExpenseItemList.add(new IncomeExpenseItem(id, income_expense_section, income_type, amount, date));
             } while (cursor.moveToNext());
         }
         cursor.close();
@@ -256,6 +259,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return incomeType;
     }
 
+
+    // Fetch budget items
+
     public List<BudgetItem> getAllBudgetItems() {
         List<BudgetItem> budgetItems = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -279,6 +285,164 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return budgetItems;
     }
 
+
+
+    // Retrieve Total Budget Amount for a Specific Month-Year
+    public double getTotalBudgetForMonth(String userInput) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        double totalBudget = 0.0;
+
+        try {
+            // Convert "November 2024" to "2024-11"
+            SimpleDateFormat inputFormat = new SimpleDateFormat("MMMM yyyy", new Locale("bn", "BD"));
+            SimpleDateFormat dbFormat = new SimpleDateFormat("yyyy-MM", Locale.ENGLISH);
+            String monthYear = dbFormat.format(inputFormat.parse(userInput));
+
+            // SQL query to sum up the budget amounts for the formatted month-year
+            String query = "SELECT SUM(amount) AS total FROM budget WHERE month_year = ?";
+            Cursor cursor = db.rawQuery(query, new String[]{monthYear});
+
+            if (cursor != null) {
+                if (cursor.moveToFirst()) {
+                    totalBudget = cursor.getDouble(cursor.getColumnIndexOrThrow("total"));
+                }
+                cursor.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace(); // Handle parsing errors
+        }
+
+        return totalBudget;
+    }
+
+
+    // Retrieve Total Income Amount for a Specific Month-Year
+    public double getTotalIncomeForMonth(String userInput) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        double totalIncome = 0.0;
+
+        try {
+            // Convert "ডিসেম্বর 2024" to "2024-12"
+            SimpleDateFormat inputFormat = new SimpleDateFormat("MMMM yyyy", new Locale("bn", "BD"));
+            SimpleDateFormat dbFormat = new SimpleDateFormat("yyyy-MM", Locale.ENGLISH);
+            String monthYearPrefix = dbFormat.format(inputFormat.parse(userInput)); // Format to yyyy-MM
+
+            // SQL query to sum up the income amounts for the specified month
+            String query = "SELECT SUM(amount) AS total FROM income_expense WHERE income_type = 'INCOME' AND income_expense_date LIKE ?";
+            Cursor cursor = db.rawQuery(query, new String[]{monthYearPrefix + "%"});
+
+            if (cursor != null) {
+                if (cursor.moveToFirst()) {
+                    totalIncome = cursor.getDouble(cursor.getColumnIndexOrThrow("total"));
+                }
+                cursor.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace(); // Handle parsing or query errors
+        }
+
+        return totalIncome;
+    }
+
+
+    // Retrieve Total Expense Amount for a Specific Month-Year
+    public double getTotalExpenseForMonth(String userInput) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        double totalExpense = 0.0;
+
+        try {
+            // Convert "ডিসেম্বর 2024" to "2024-12"
+            SimpleDateFormat inputFormat = new SimpleDateFormat("MMMM yyyy", new Locale("bn", "BD"));
+            SimpleDateFormat dbFormat = new SimpleDateFormat("yyyy-MM", Locale.ENGLISH);
+            String monthYearPrefix = dbFormat.format(inputFormat.parse(userInput)); // Format to yyyy-MM
+
+            // SQL query to sum up the income amounts for the specified month
+            String query = "SELECT SUM(amount) AS total FROM income_expense WHERE income_type = 'EXPENSE' AND income_expense_date LIKE ?";
+            Cursor cursor = db.rawQuery(query, new String[]{monthYearPrefix + "%"});
+
+            if (cursor != null) {
+                if (cursor.moveToFirst()) {
+                    totalExpense = cursor.getDouble(cursor.getColumnIndexOrThrow("total"));
+                }
+                cursor.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace(); // Handle parsing or query errors
+        }
+
+        return totalExpense;
+    }
+
+
+
+    // Method to fetch monthly income data
+    @SuppressLint("Range")
+    public ArrayList<Double> getLastSixMonthsIncomeData() {
+        ArrayList<Double> incomeData = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+    // Query to get income data for the last 6 months
+
+    String incomeQuery = "SELECT SUM(amount) AS income, strftime('%m', income_expense_date) AS month "
+                + "FROM " + TABLE_INCOME_EXPENSE
+                + " WHERE " + COLUMN_INCOME_TYPE + " = 'INCOME' "
+                + "AND income_expense_date >= date('now', '-6 months') "
+                + "GROUP BY strftime('%m', income_expense_date) "
+                + "ORDER BY strftime('%m', income_expense_date)";
+
+
+        Cursor cursor = db.rawQuery(incomeQuery, null);
+        if (cursor.moveToFirst()) {
+        do {
+            incomeData.add(cursor.getDouble(cursor.getColumnIndex("income")));
+        } while (cursor.moveToNext());
+    }
+        cursor.close();
+        db.close();
+        return incomeData;
+}
+
+
+    // Method to fetch monthly expense data
+    @SuppressLint("Range")
+    public ArrayList<Double> getLastSixMonthsExpenseData() {
+        ArrayList<Double> expenseData = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // Query to get expense data for the last 6 months
+        String expenseQuery = "SELECT SUM(amount) AS expense, strftime('%m', income_expense_date) AS month "
+                + "FROM " + TABLE_INCOME_EXPENSE
+                + " WHERE " + COLUMN_INCOME_TYPE + " = 'EXPENSE' "
+                + "AND income_expense_date >= date('now', '-6 months') "
+                + "GROUP BY strftime('%m', income_expense_date) "
+                + "ORDER BY strftime('%m', income_expense_date)";
+
+
+
+        Cursor cursor = db.rawQuery(expenseQuery, null);
+        if (cursor.moveToFirst()) {
+            do {
+                expenseData.add(cursor.getDouble(cursor.getColumnIndex("expense")));
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return expenseData;
+    }
+
+//Retrieve Loggedin User's Name
+    public String getLoggedInUserName(String userId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String userName = null;
+        Cursor cursor = db.rawQuery("SELECT name FROM users WHERE id = ?", new String[]{userId});
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                userName = cursor.getString(cursor.getColumnIndexOrThrow("name"));
+            }
+            cursor.close();
+        }
+        db.close();
+        return userName;
+    }
 
 
 }

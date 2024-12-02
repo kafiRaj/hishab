@@ -7,12 +7,14 @@
     android:padding="16dp">
 
     <ImageView
+        android:id="@+id/iv_nav_header_profile_image"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:src="@drawable/ic_profile"
     android:layout_gravity="left"/>
 
     <TextView
+        android:id="@+id/tv_nav_header_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="User Name"
@@ -21,6 +23,7 @@
         android:textColor="#FFFFFF"
         android:layout_marginTop="8dp"
         android:gravity="center"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="1dp"

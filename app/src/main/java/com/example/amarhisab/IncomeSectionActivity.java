@@ -46,21 +46,8 @@ public class IncomeSectionActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle("আমার হিসাব");
             toolbar.setTitleTextColor(Color.WHITE);
-
+            toolbar.setNavigationIcon(R.drawable.ic_back);
         }
-
-        // Initialize DrawerLayout and NavigationView
-        drawerLayout = findViewById(R.id.drawer_layout);
-        navigationView = findViewById(R.id.nav_view);
-
-        //to do menu click funtion
-
-        // Add Drawer Toggle for Toolbar (Hamburger Menu)
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawerLayout, toolbar, R.string.open_drawer, R.string.close_drawer
-        );
-        drawerLayout.addDrawerListener(toggle);
-        toggle.syncState();
 
 
         // Find AutoCompleteTextView by its ID
@@ -121,6 +108,8 @@ public class IncomeSectionActivity extends AppCompatActivity {
                 }
             }
         });
+
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
     }
 
     private void clearForm() {
@@ -129,7 +118,9 @@ public class IncomeSectionActivity extends AppCompatActivity {
         spinnerIncomeSection.setSelection(0); // Reset to hint value
     }
 
-
-
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
 }
 

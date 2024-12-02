@@ -59,6 +59,11 @@
         <activity
             android:name=".BudgetGridView"
             android:exported="true" />
+
+        <activity
+            android:name=".ReportActivity"
+            android:exported="true" />
+
     </application>
 
 </manifest>

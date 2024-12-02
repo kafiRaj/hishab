@@ -2,6 +2,7 @@ package com.example.amarhisab;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -90,19 +91,21 @@ public class LoginActivity extends AppCompatActivity {
     private void login(String username, String password) {
         // Query to check the user credentials
         Cursor cursor = db.rawQuery(
-                "SELECT name FROM users WHERE userid = ? AND password = ?",
+                "SELECT id, name FROM users WHERE userid = ? AND password = ?",
                 new String[]{username, password}
         );
 
         if (cursor != null && cursor.moveToFirst()) {
             // Login successful
             @SuppressLint("Range") String name = cursor.getString(cursor.getColumnIndex("name"));
+            @SuppressLint("Range") int userid = cursor.getInt(cursor.getColumnIndex("id"));
             cursor.close();
-
 
             // Navigate to a new activity (e.g., DashboardActivity)
             Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
-            //intent.putExtra("NAME", name); // Add name to Intent
+
+            onLoginSuccess(userid, name);
+
             startActivity(intent);
             finish(); // Close the login activity
         } else {
@@ -114,6 +117,15 @@ public class LoginActivity extends AppCompatActivity {
             cursor.close();
         }
     }
+
+    public void onLoginSuccess(int userid, String name) {
+        SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt("userid", userid);
+        editor.putString("name", name);
+        editor.apply();
+    }
+
 
     @Override
     protected void onDestroy() {

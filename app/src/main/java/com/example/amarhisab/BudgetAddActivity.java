@@ -2,6 +2,7 @@ package com.example.amarhisab;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.icu.text.SimpleDateFormat;
 import android.icu.util.Calendar;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.widget.Toolbar;
 
 import java.util.Date;
 import java.util.Locale;
@@ -25,7 +27,7 @@ public class BudgetAddActivity extends AppCompatActivity {
     private EditText etComments, etAmount;
     private DatabaseHelper dbHelper;
 
-    private String formattedMonthYear; // To store formatted value for saving to the database
+    private String formattedMonthYear;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -34,6 +36,16 @@ public class BudgetAddActivity extends AppCompatActivity {
         // Force light theme even if the system theme is dark
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         setContentView(R.layout.activity_budget_add);
+
+        // Set up the toolbar
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("আমার হিসাব");
+            toolbar.setTitleTextColor(Color.WHITE);
+            toolbar.setNavigationIcon(R.drawable.ic_back);
+        }
 
         // Initialize database helper
         dbHelper = new DatabaseHelper(this);
@@ -52,6 +64,8 @@ public class BudgetAddActivity extends AppCompatActivity {
 
         // Handle Save button click
         btnSave.setOnClickListener(v -> saveData());
+
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
     }
 
     private void saveData() {
@@ -129,6 +143,11 @@ public class BudgetAddActivity extends AppCompatActivity {
         return months[month] + " " + year;
     }
 
+    @Override
+    public void onBackPressed() {
+        // Perform custom logic here, e.g., show confirmation dialog
+        super.onBackPressed(); // Call this to handle default back press
+    }
 
     @Override
     protected void onDestroy() {

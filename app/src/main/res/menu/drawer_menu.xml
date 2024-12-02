@@ -8,12 +8,12 @@
 
     <item
         android:id="@+id/nav_income"
-        android:title="আয় এর তথ্য"
+        android:title="আয়/ব্যয় এর তথ্য"
         android:icon="@drawable/ic_add_income"/>
 
     <item
         android:id="@+id/nav_expense"
-        android:title="ব্যায় এর তথ্য"
+        android:title="বাজেট এর তথ্য"
         android:icon="@drawable/ic_add_expense"/>
 
     <item
